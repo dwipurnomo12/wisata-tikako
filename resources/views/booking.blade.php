@@ -75,18 +75,25 @@
 <script>
     $(document).ready(function() {
         function calculateTotal() {
-            var hargaPerHari    = parseFloat($("#harga").val());
-            var tglMulai        = $("#tgl_mulai").val();
-            var tglSelesai      = $("#tgl_selesai").val();
+            var hargaPerHari = parseFloat($("#harga").val());
+            var tglMulai = $("#tgl_mulai").val();
+            var tglSelesai = $("#tgl_selesai").val();
 
             if (tglMulai && tglSelesai) {
-                var dateMulai   = new Date(tglMulai);
+                var dateMulai = new Date(tglMulai);
                 var dateSelesai = new Date(tglSelesai);
                 var selisihHari = (dateSelesai - dateMulai) / (1000 * 60 * 60 * 24);
-                var totalHarga  = hargaPerHari * selisihHari;
 
-                if (!isNaN(totalHarga)) {
-                    $("#total_harga").val(totalHarga);
+                if (selisihHari < 0) {
+                    $("#total_harga").val("Tanggal Selesai harus setelah Tanggal Mulai");
+                } else if (selisihHari === 0) {
+                    $("#total_harga").val(hargaPerHari);
+                } else {
+                    var totalHarga = hargaPerHari * selisihHari;
+
+                    if (!isNaN(totalHarga)) {
+                        $("#total_harga").val(totalHarga);
+                    }
                 }
             }
         }
@@ -96,6 +103,7 @@
         calculateTotal();
     });
 </script>
+
 <script>
     function previewImage(){
         preview.src=URL.createObjectURL(event.target.files[0]);

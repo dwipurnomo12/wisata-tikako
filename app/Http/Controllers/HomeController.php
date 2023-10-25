@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
+use App\Models\Penginapan;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
@@ -23,6 +26,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('admin.dashboard');
+        return view('admin.dashboard', [
+            'totalpenginapan'   => Penginapan::count(),
+            'reservasiLunas'    => Booking::where('status', 'lunas')->count(),
+            'reservasiPending'  => Booking::where('status', 'pending')->count(),
+            'pemesananPending'  => Booking::where('status', 'pending')->orderBy('id', 'DESC')->get()
+        ]);
     }
 }

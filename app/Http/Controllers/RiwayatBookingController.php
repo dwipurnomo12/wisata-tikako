@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use Barryvdh\DomPDF\Facade\pdf as PDF;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
 
 class RiwayatBookingController extends Controller
 {
@@ -13,6 +16,16 @@ class RiwayatBookingController extends Controller
         return view('riwayat-booking', [
             'booking'   => $booking
         ]);
+    }
+
+    public function print($id)
+    {
+        $printPemesanan = Booking::find($id);
+        $pdf = PDF::loadView('print-pemesanan', [
+            'data'      => $printPemesanan
+        ]);
+
+        return $pdf->stream('print-pemesanan.pdf');
     }
 
     public function delete($id)

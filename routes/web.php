@@ -37,6 +37,7 @@ Route::get('/booking/{id}', [PenginapanController::class, 'booking']);
 Route::post('/booking/{id}', [PenginapanController::class, 'bookingNow']);
 
 Route::get('/riwayat-booking', [RiwayatBookingController::class, 'riwayat']);
+Route::get('/print-pemesanan/{id}', [RiwayatBookingController::class, 'print']);
 Route::delete('/riwayat-booking/{id}', [RiwayatBookingController::class, 'delete']);
 
 Route::get('/kontak', function () {
@@ -44,9 +45,14 @@ Route::get('/kontak', function () {
 });
 
 Auth::routes();
-Route::get('/dashboard', [HomeController::class, 'index'])->name('home');
-Route::resource('/admin/fasilitas', AdminFasilitasController::class);
-Route::resource('/admin/wisata', AdminWisataController::class);
-Route::resource('/admin/penginapan', AdminPenginapanController::class);
-Route::get('/admin/reservasi', [AdminReservasiController::class, 'index']);
-Route::get('/admin/reservasi/{id}/konfirmasi', [AdminReservasiController::class, 'konfirmasi']);
+Route::middleware('auth')->group(function(){
+    Route::group(['middleware'  => 'CheckRole:admin'], function(){
+        Route::get('/dashboard', [HomeController::class, 'index'])->name('home');
+        Route::resource('/admin/fasilitas', AdminFasilitasController::class);
+        Route::resource('/admin/wisata', AdminWisataController::class);
+        Route::resource('/admin/penginapan', AdminPenginapanController::class);
+        Route::get('/admin/reservasi', [AdminReservasiController::class, 'index']);
+        Route::get('/admin/reservasi/{id}/konfirmasi', [AdminReservasiController::class, 'konfirmasi']);
+    });
+});
+

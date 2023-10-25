@@ -26,44 +26,58 @@
                     </div>
                 @else
                     @foreach ($booking as $item)
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            Detail Pemesanan
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                Detail Pemesanan
+                            </div>
+                            <table class="table">
+                                <tr>
+                                    <td>Kode Pemesanan</td>
+                                    <td>:</td>
+                                    <td>{{ $item->kd_pemesanan }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Nama Pemesan</td>
+                                    <td>:</td>
+                                    <td>{{ auth()->user()->name }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Tanggal Mulai</td>
+                                    <td>:</td>
+                                    <td>{{ $item->tgl_mulai }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Tanggal Selesai</td>
+                                    <td>:</td>
+                                    <td>{{ $item->tgl_selesai }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Biaya</td>
+                                    <td>:</td>
+                                    <td>Rp. {{ number_format($item->total_harga, 2, ',', '.') }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Status Pemesanan</td>
+                                    <td>:</td>
+                                    <td>
+                                        @if ($item->status == 'pending')
+                                            <button class="btn btn-warning">{{ $item->status }}</button>
+                                        @else
+                                            <button class="btn btn-success">{{ $item->status }}</button>
+                                        @endif
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <div class="card-footer">
+                                <form id="{{ $item->id }}" action="/riwayat-booking/{{ $item->id }}" method="POST" class="d-inline">
+                                    @method('delete')
+                                    @csrf
+                                    <div class="btn btn-danger my-1 float-end swal-confirm" data-form="{{ $item->id }}">Hapus</div>
+                                </form>
+                                <a href="/print-pemesanan/{{ $item->id }}" class="btn btn-success float-end my-1 me-2">Print</a>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="col-md-4">
-                                <p class="text-muted">Nama</p>
-                                <h5>{{ auth()->user()->name }}</h5>
-                            </div>
-                            <div class="col-md-4">
-                                <p class="text-muted">Tanggal Mulai</p>
-                                <h5>{{ $item->tgl_mulai }}</h5>
-                            </div>
-                            <div class="col-md-4">
-                                <p class="text-muted">Tanggal Selesai</p>
-                                <h5>{{ $item->tgl_selesai }}</h5>
-                            </div>
-                            <div class="col-md-4">
-                                <p class="text-muted">Total Harga</p>
-                                <h5>Rp. {{ $item->total_harga }}</h5>
-                            </div>
-                            <div class="col-md-4">
-                                <p class="text-muted">Status Pembayaran</p>
-                                @if ($item->status == 'pending')
-                                    <button class="btn btn-warning">{{ $item->status }}</button>
-                                @else
-                                    <button class="btn btn-success">{{ $item->status }}</button>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <form id="{{ $item->id }}" action="/riwayat-booking/{{ $item->id }}" method="POST" class="d-inline">
-                                @method('delete')
-                                @csrf
-                                <div class="btn btn-sm btn-danger my-1 swal-confirm" data-form="{{ $item->id }}">Hapus</div>
-                            </form>
-                        </div>
-                    </div>
                     @endforeach
                 @endif
             </div>
